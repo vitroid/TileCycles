@@ -4,23 +4,25 @@
 #include <unistd.h>
 
 using ArrayInt = std::vector< int >;
+using ArrayArrayInt = std::vector< ArrayInt >;
+
 std::mt19937 gen(getpid());
 
+// random sample one element
 int sample(ArrayInt const& a)
 {
   return a[gen()%a.size()];
 }
 
 std::pair<ArrayInt, ArrayInt>
-find_cycle(ArrayInt const& nei,
-           ArrayInt const& Nnei,
+find_cycle(ArrayArrayInt const& neis,
            ArrayInt chain)
 {
   if ( chain.size() == 0 ){
     int i;
     while (1){
-      i = gen() % Nnei.size();
-      if (Nnei[i]>0) break; 
+      i = gen() % neis.size();
+      if (neis[i].size()>0) break;
     }
     chain.push_back(i);
   }
@@ -31,14 +33,14 @@ find_cycle(ArrayInt const& nei,
   if (chain_size > 1){
     prev = chain[chain_size-2];
   }
-  for(int i=0; i<Nnei[curr]; i++){
-    if ( nei[curr*4+i] != prev ){
-      nexts.push_back(nei[curr*4+i]);
+  for(unsigned int i=0; i<neis[curr].size(); i++){
+    if ( neis[curr][i] != prev ){
+      nexts.push_back(neis[curr][i]);
     }
   }
   while (1){
     auto next = sample(nexts);
-    for(int i=0; i<chain.size(); i++){
+    for(unsigned int i=0; i<chain.size(); i++){
       if (chain[i] == next){
         ArrayInt cycle(chain.size() - i);
         auto start = chain.begin() + i;
@@ -52,36 +54,41 @@ find_cycle(ArrayInt const& nei,
     prev = curr;
     curr = next;
     nexts.resize(0);
-    for(int i=0; i<Nnei[curr]; i++){
-      if ( nei[curr*4+i] != prev ){
-        nexts.push_back(nei[curr*4+i]);
+    for(unsigned int i=0; i<neis[curr].size(); i++){
+      if ( neis[curr][i] != prev ){
+        nexts.push_back(neis[curr][i]);
       }
     }
   }
 }
 
-void remove_cycle(ArrayInt& neis,
-                  ArrayInt& Nneis,
+void remove_cycle(ArrayArrayInt& neis,
                   ArrayInt const& cycle)
 {
-  for(auto i=0; i<cycle.size(); i++){
+  for(unsigned int i=0; i<cycle.size(); i++){
     auto j = i+1;
     if ( j == cycle.size() ){
       j=0;
     }
     auto a = cycle[i];
     auto b = cycle[j];
-    for(auto i=0; i<Nneis[a]; i++){
-      if (neis[a*4+i] == b){
-        Nneis[a] --;
-        neis[a*4+i] = neis[a*4+Nneis[a]];
+    for(unsigned int i=0; i<neis[a].size(); i++){
+      if (neis[a][i] == b){
+        auto tail = neis[a].back();
+        neis[a].pop_back();
+        if (i != neis[a].size()){
+          neis[a][i] = tail;
+        }
         break;
       }
     }
-    for(auto i=0; i<Nneis[b]; i++){
-      if (neis[b*4+i] == a){
-        Nneis[b] --;
-        neis[b*4+i] = neis[b*4+Nneis[b]];
+    for(unsigned int i=0; i<neis[b].size(); i++){
+      if (neis[b][i] == a){
+        auto tail = neis[b].back();
+        neis[b].pop_back();
+        if (i != neis[b].size()){
+          neis[b][i] = tail;
+        }
         break;
       }
     }
@@ -98,22 +105,25 @@ printArrayInt(ArrayInt const& a, char c)
   std::cout << "\n";
 }
 
-using ArrayArrayInt = std::vector< ArrayInt >;
 
 ArrayArrayInt
-tileByCycles(ArrayInt& neis, ArrayInt& Nneis)
+tileByCycles(ArrayArrayInt& neis)
 {
   ArrayArrayInt cycles;
   ArrayInt chain;
 
-  int nedge = Nneis.size() * 2; // assume a normal ice.
+  int nedge = 0;
+  for( unsigned int i=0; i< neis.size(); i++){
+    nedge += neis[i].size();
+  }
+  nedge /= 2;
 
   while ( nedge > 0 ){
-    auto [newchain, cycle] = find_cycle(neis, Nneis, chain);
-    printArrayInt(cycle, 'o');
+    auto [newchain, cycle] = find_cycle(neis, chain);
+    // printArrayInt(cycle, 'o');
     cycles.push_back(cycle);
     chain.assign(newchain.begin(), newchain.end());
-    remove_cycle(neis, Nneis, cycle);
+    remove_cycle(neis, cycle);
     nedge -= cycle.size();
   }
   return cycles;
@@ -125,5 +135,3 @@ tileByCycles(ArrayInt& neis, ArrayInt& Nneis)
 //あとはこれにcpythonのインターフェースをつければいい。
 //この書き方でいいなら、Fortranを使う必要はないね。
 //あとでc++のメモリー構造を勉強する。
-
-

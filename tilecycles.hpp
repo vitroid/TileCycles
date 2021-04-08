@@ -12,4 +12,4 @@ printArrayInt(ArrayInt const& a, char c);
 using ArrayArrayInt = std::vector< ArrayInt >;
 
 ArrayArrayInt
-tileByCycles(ArrayInt& neis, ArrayInt& Nneis);
+tileByCycles(ArrayArrayInt& neis);
