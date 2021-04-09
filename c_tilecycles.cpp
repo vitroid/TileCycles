@@ -1,3 +1,6 @@
+/*
+ * Interface to c++ tilecycles.
+ */
 #include <Python.h>
 //#define NPY_NO_DEPRECATED_API NPY_1_7_API_VERSION
 #include <numpy/arrayobject.h>
@@ -7,16 +10,22 @@
 
 static PyObject *tile(PyObject *self, PyObject* args);
 
-
+std::mt19937 gen;
 
 static PyMethodDef module_methods[] = {
   {"tile", tile, METH_VARARGS,
-   "Tile the undirected graph of ice by cycles."},
+   "Tile the undirected even graph by cycles.\n"
+   "Input:\n"
+   "pairs\tA numpy 2D array of size Nedge x2.\n"
+   "Nnode\tNumber of nodes in the graph. The values in pairs must be less than it.\n"
+   "seed\tRandom seed.\n"
+   "Output:\n"
+   "A list of cycle members.\n"},
   {NULL, NULL, 0, NULL}};
 
 static struct PyModuleDef moduledef = {
         PyModuleDef_HEAD_INIT,
-        "c_tilecycles",
+        "tilecycles",
         NULL,
         -1,
         module_methods,
@@ -28,7 +37,7 @@ static struct PyModuleDef moduledef = {
 
 
 //my initializer
-PyMODINIT_FUNC PyInit_c_tilecycles(void) {
+PyMODINIT_FUNC PyInit_tilecycles(void) {
   PyObject *m;
   import_array();
   m = PyModule_Create(&moduledef);
@@ -53,16 +62,17 @@ int not_intmatrix(PyArrayObject *mat)  {
 static PyObject *tile(PyObject *self, PyObject* args) {
   // expect two arguments.
   PyArrayObject *pairs;
-  int Nnode;
+  int Nnode, seed;
   //int dimss[2], ngrid[3];
 
   /* Parse tuples separately since args will differ between C fcns */
-  if (!PyArg_ParseTuple(args, "O!i", &PyArray_Type,
-			&pairs, &Nnode)) return NULL;
+  if (!PyArg_ParseTuple(args, "O!ii", &PyArray_Type,
+			&pairs, &Nnode, &seed)) return NULL;
   //if (!PyArg_ParseTuple(args, "I", &n, &m, &ngrid[0], &ngrid[1], &ngrid[2])) return NULL;
   if (NULL == pairs) return NULL;
   if (not_intmatrix(pairs)) return NULL;
   if ( pairs->dimensions[1] != 2 ) return NULL;
+  gen.seed(seed);
 
   /* Get the dimensions of the input */
   int npairs =pairs->dimensions[0];

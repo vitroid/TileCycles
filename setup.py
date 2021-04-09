@@ -9,7 +9,7 @@ import re
 #Copied from wheel package
 here = os.path.abspath(os.path.dirname(__file__))
 
-with codecs.open(os.path.join(os.path.dirname(__file__), 'tilecycles.py'),
+with codecs.open(os.path.join(os.path.dirname(__file__), 'tilecycles_py.py'),
                  encoding='utf8') as version_file:
     metadata = dict(re.findall(r"""__([a-z]+)__ = "([^"]+)""", version_file.read()))
 
@@ -19,15 +19,15 @@ dist.Distribution().fetch_build_eggs(['numpy'])
 import numpy
 from numpy.distutils.misc_util import get_numpy_include_dirs
 
-setup(ext_modules=[Extension("c_tilecycles", ["c_tilecycles.cpp", "tilecycles.cpp"],
-                             extra_compile_args = ["-std=c++17",],
+setup(ext_modules=[Extension("tilecycles", ["c_tilecycles.cpp", "tilecycles.cpp"],
+                             extra_compile_args = ["-std=c++11",],
                              include_dirs=get_numpy_include_dirs())],
       headers=["tilecycles.hpp"],
       # include_dirs=get_numpy_include_dirs(),
       name='TileCycles',
       version=metadata['version'],
       zip_safe=False,
-      py_modules=['tilecycles'],
+      py_modules=['tilecycles_py'],
       description='Bla bla.',
       #long_description=README + '\n\n' +  CHANGES,
       classifiers=[

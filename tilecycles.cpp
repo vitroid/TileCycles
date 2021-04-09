@@ -5,8 +5,9 @@
 
 using ArrayInt = std::vector< int >;
 using ArrayArrayInt = std::vector< ArrayInt >;
+using ArrayIntPair = std::pair<ArrayInt, ArrayInt>;
 
-std::mt19937 gen(getpid());
+extern std::mt19937 gen;
 
 // random sample one element
 int sample(ArrayInt const& a)
@@ -14,7 +15,7 @@ int sample(ArrayInt const& a)
   return a[gen()%a.size()];
 }
 
-std::pair<ArrayInt, ArrayInt>
+ArrayIntPair
 find_cycle(ArrayArrayInt const& neis,
            ArrayInt chain)
 {
@@ -119,7 +120,13 @@ tileByCycles(ArrayArrayInt& neis)
   nedge /= 2;
 
   while ( nedge > 0 ){
+    /* disabled. It is available with c++17 and later.
     auto [newchain, cycle] = find_cycle(neis, chain);
+    */
+    //for c++14
+    ArrayIntPair p = find_cycle(neis, chain);
+    ArrayInt& newchain = p.first;
+    ArrayInt& cycle    = p.second;
     // printArrayInt(cycle, 'o');
     cycles.push_back(cycle);
     chain.assign(newchain.begin(), newchain.end());
