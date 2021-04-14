@@ -30,3 +30,11 @@
 *.exe
 *.out
 *.app
+
+.eggs/
+
+.vscode/
+
+__pycache__/
+
+.ipynb_checkpoints/

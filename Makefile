@@ -4,8 +4,6 @@ PKGNAME=tilecycles
 build_ext:
 	python setup.py build_ext --inplace
 
-install:
-	python setup.py install
 
 test-cpp: test-cpp.o tilecycles.o c_tilecycles.o
 	clang++ $^ -o $@
@@ -25,7 +23,7 @@ test-install:
 
 
 install:
-	./setup.py install
+	python setup.py install
 uninstall:
 	-pip uninstall -y $(PKGNAME)
 build: README.md
@@ -40,5 +38,5 @@ check:
 
 clean:
 	-rm $(ALL) *.so *~ */*~ *.o *.gro *.rdf
-	-rm -rf build dist
+	-rm -rf build dist *.egg-info
 	# -rm -rf PairList.egg-info

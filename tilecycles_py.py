@@ -3,7 +3,7 @@ import random
 import numpy as np
 from collections import defaultdict
 
-__version__ = "0.1.1"
+__version__ = "0.1.2"
 
 def find_cycle(neis, chain):
     head = chain[-1]
@@ -53,3 +53,24 @@ def tile(pairs, Nnode):
         neis[i].append(j)
         neis[j].append(i)
     return [cycle for cycle in tileByCycles(neis)]
+
+
+def dipole(cycle, ipos):
+    """
+    Returns the sum of the vectors that make up the cycle.
+
+    ipos are the relative positions in the periodic boundary parallelepiped cell, and are integers between 0 and 65535.
+    If the cycle does not cross the cell boundary, it is (0,0,0), and if it crosses in the x direction, it is (±65536,0,0).
+    """
+    d = ipos[cycle] - ipos[np.roll(cycle, 1)]
+    d = (d+32768) % 65536 - 32768
+    # print(d)
+    return np.sum(d, axis=0) // 65536
+
+
+def dipoles(cycles, relpos):
+    ipos = (relpos * 65536).astype(int)
+    d = np.zeros([len(cycles), 3], dtype=np.int)
+    for i, cycle in enumerate(cycles):
+        d[i] = dipole(cycle, ipos)
+    return d

@@ -25,7 +25,7 @@ from genice2.plugin import Lattice, Format, Molecule
 lattice    = Lattice("1c")
 formatter  = Format("raw", stage=(1,2,))
 water      = Molecule("spce")
-raw = GenIce(lattice, rep=(30,30,30)).generate_ice(water, formatter)
+raw = GenIce(lattice, rep=(3,3,3)).generate_ice(water, formatter)
 
 pairs = []
 for i,j in raw["graph"].edges():
@@ -44,7 +44,8 @@ cycles = tc.tile(pairs, Nnode)
 print(time.time() - now, "python")
 print(cycles[0])
 
-
+dip = tc.dipoles(cycles, raw['reppositions'])
+print(dip)
 
 
 # 2021-04-05現状報告

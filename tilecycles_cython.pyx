@@ -78,3 +78,15 @@ def tileByCycles(neis, Nneis):
         # print(neis)
         # print(Nneis)
         Nedges -= 2*len(cycle)
+
+
+def tile(pairs, Nnode):
+    neis  = np.zeros((Nnode,4), dtype=np.int32)
+    Nneis = np.zeros(Nnode, dtype=np.int32)
+    for i,j in pairs:
+        neis[i, Nneis[i]] = j
+        Nneis[i] += 1
+        neis[j, Nneis[j]] = i
+        Nneis[j] += 1
+
+    return [cycle for cycle in tileByCycles(neis, Nneis)]
