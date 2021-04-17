@@ -1,4 +1,7 @@
 #include "tilecycles.hpp"
+#include <unistd.h>
+
+std::mt19937 gen(getpid());
 
 int main(int argc, char *argv[])
 {

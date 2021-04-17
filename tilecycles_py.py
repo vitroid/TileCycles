@@ -1,11 +1,8 @@
 # まずはpythonとして書く。
 import random
-import numpy as np
 from collections import defaultdict
 
-__version__ = "0.1.2"
-
-def find_cycle(neis, chain):
+def find_cycle(neis, chain, order):
     head = chain[-1]
     if len(chain) > 1:
         last = chain[-2]
@@ -16,13 +13,19 @@ def find_cycle(neis, chain):
     while True:
         last=head
         head = random.choice(nexts)
-        for i, node in enumerate(chain):
-            if node == head:
-                return chain[:i], chain[i:]
+        i = order[head]
+        if i == 0:
+            order[head] = -1
+            return [], chain
+        elif i > 0:
+            return chain[:i+1], chain[i:]
+        order[head] = len(chain)
         chain.append(head)
         nexts = [i for i in neis[head] if i != last]
 
-def remove_cycle(neis, cycle):
+def remove_cycle(neis, cycle, order):
+    for i in range(1,len(cycle)):
+        order[cycle[i]] = -1
     for i in range(len(cycle)):
         j = i-1
         if j < 0:
@@ -31,21 +34,22 @@ def remove_cycle(neis, cycle):
         b = cycle[j]
         neis[a].remove(b)
         neis[b].remove(a)
-        if len(neis[a]) == 0:
-            del neis[a]
-        if len(neis[b]) == 0:
-            del neis[b]
+    for node in cycle:
+        if len(neis[node]) == 0:
+            del neis[node]
 
 
 def tileByCycles(neis):
     chain = []
+    order = [-1] * len(neis)
     while len(neis) > 0:
         if len(chain) == 0:
             head = random.choice(list(neis))
             chain = [head]
-        chain, cycle = find_cycle(neis, chain)
+            order[head] = 0
+        chain, cycle = find_cycle(neis, chain, order)
         yield cycle
-        remove_cycle(neis, cycle)
+        remove_cycle(neis, cycle, order)
 
 def tile(pairs, Nnode):
     neis = defaultdict(list)
@@ -53,24 +57,3 @@ def tile(pairs, Nnode):
         neis[i].append(j)
         neis[j].append(i)
     return [cycle for cycle in tileByCycles(neis)]
-
-
-def dipole(cycle, ipos):
-    """
-    Returns the sum of the vectors that make up the cycle.
-
-    ipos are the relative positions in the periodic boundary parallelepiped cell, and are integers between 0 and 65535.
-    If the cycle does not cross the cell boundary, it is (0,0,0), and if it crosses in the x direction, it is (±65536,0,0).
-    """
-    d = ipos[cycle] - ipos[np.roll(cycle, 1)]
-    d = (d+32768) % 65536 - 32768
-    # print(d)
-    return np.sum(d, axis=0) // 65536
-
-
-def dipoles(cycles, relpos):
-    ipos = (relpos * 65536).astype(int)
-    d = np.zeros([len(cycles), 3], dtype=np.int)
-    for i, cycle in enumerate(cycles):
-        d[i] = dipole(cycle, ipos)
-    return d

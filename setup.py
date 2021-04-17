@@ -9,9 +9,7 @@ import re
 #Copied from wheel package
 here = os.path.abspath(os.path.dirname(__file__))
 
-with codecs.open(os.path.join(os.path.dirname(__file__), 'tilecycles_py.py'),
-                 encoding='utf8') as version_file:
-    metadata = dict(re.findall(r"""__([a-z]+)__ = "([^"]+)""", version_file.read()))
+__version__ = "0.1.3"
 
 # bootstrap numpy
 from setuptools import dist
@@ -25,7 +23,7 @@ setup(ext_modules=[Extension("tilecycles", ["c_tilecycles.cpp", "tilecycles.cpp"
       headers=["tilecycles.hpp"],
       # include_dirs=get_numpy_include_dirs(),
       name='TileCycles',
-      version=metadata['version'],
+      version=__version__,
       zip_safe=False,
       py_modules=['tilecycles_py'],
       description='Bla bla.',
