@@ -42,3 +42,8 @@ __pycache__/
 TileCycles.egg-info/
 
 dist/
+
+*.png
+*.svg
+@*
+test-cpp
