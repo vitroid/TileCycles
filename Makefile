@@ -5,7 +5,7 @@ build_ext:
 	python setup.py build_ext --inplace
 
 
-test-cpp: test-cpp.o tilecycles.o 
+test-cpp: test-cpp.o tilecycles.o
 	clang++ $^ -o $@
 %.o: %.cpp tilecycles.hpp
 	clang++ -std=c++17 -c $< -g `python3-config --includes` -I`python -c "import numpy; print(numpy.get_include())"`
@@ -21,6 +21,8 @@ test-deploy: build
 test-install:
 	pip install --index-url https://test.pypi.org/simple/ $(PKGNAME)
 
+pep8:
+	autopep8 -r -a -a -i .
 
 install:
 	python setup.py install

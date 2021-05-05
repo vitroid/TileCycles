@@ -35,7 +35,7 @@ def find_cycle(g, chain):
 
 def remove_cycle(g, cycle):
     for i in range(len(cycle)):
-        a = cycle[i-1]
+        a = cycle[i - 1]
         b = cycle[i]
         g.remove_edge(a, b)
     for a in cycle:

@@ -22,14 +22,14 @@ import time
 from genice2.genice import GenIce
 from genice2.plugin import Lattice, Format, Molecule
 
-lattice    = Lattice("1c")
-formatter  = Format("raw", stage=(1,2,))
-water      = Molecule("spce")
-raw = GenIce(lattice, rep=(20,20,20)).generate_ice(water, formatter)
+lattice = Lattice("1c")
+formatter = Format("raw", stage=(1, 2,))
+water = Molecule("spce")
+raw = GenIce(lattice, rep=(20, 20, 20)).generate_ice(water, formatter)
 
 pairs = []
-for i,j in raw["graph"].edges():
-    pairs.append([i,j])
+for i, j in raw["graph"].edges():
+    pairs.append([i, j])
 pairs = np.array(pairs, dtype=np.int32)
 Nnode = raw['reppositions'].shape[0]
 
@@ -46,10 +46,6 @@ print(time.time() - now, "python")
 print(cycles[0])
 
 
-
-
-
-
 def _dipole(cycle, ipos):
     """
     Returns the sum of the vectors that make up the cycle.
@@ -58,7 +54,7 @@ def _dipole(cycle, ipos):
     If the cycle does not cross the cell boundary, it is (0,0,0), and if it crosses in the x direction, it is (±65536,0,0).
     """
     d = ipos[cycle] - ipos[np.roll(cycle, 1)]
-    d = (d+32768) % 65536 - 32768
+    d = (d + 32768) % 65536 - 32768
     # print(d)
     return np.sum(d, axis=0) // 65536
 
@@ -78,33 +74,32 @@ ind = []            # indices of non-zero dipole
 parity = dict()     # +/- 1
 vec = np.zeros(3)   # net dipole
 for i, d in enumerate(dip):
-    if d@d > 0:
+    if d @ d > 0:
         ind.append(i)
         parity[i] = 1
         vec += d
-sca = vec@vec
+sca = vec @ vec
 print(vec)
 while sca > 0:
     # select one cycle
     i = random.choice(list(parity.keys()))
 
     # invert it
-    newvec = vec - dip[i]*2*parity[i]
+    newvec = vec - dip[i] * 2 * parity[i]
 
     # if the inversion reduces the net dipole
-    if newvec@newvec <= sca:
+    if newvec @ newvec <= sca:
         print(newvec)
         # accept inversion
         vec = newvec
-        sca = vec@vec
+        sca = vec @ vec
         parity[i] = -parity[i]
 # verify final net dipole
 vec = np.zeros(3)
 for i, d in enumerate(dip):
-    if d@d > 0:
-        vec += d*parity[i]
+    if d @ d > 0:
+        vec += d * parity[i]
 print(vec)
-
 
 
 # 2021-04-05現状報告

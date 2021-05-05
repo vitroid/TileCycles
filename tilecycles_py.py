@@ -2,6 +2,7 @@
 import random
 from collections import defaultdict
 
+
 def find_cycle(neis, chain, order):
     head = chain[-1]
     if len(chain) > 1:
@@ -11,23 +12,24 @@ def find_cycle(neis, chain, order):
         nexts = neis[head]
     # print(nexts)
     while True:
-        last=head
+        last = head
         head = random.choice(nexts)
         i = order[head]
         if i == 0:
             order[head] = -1
             return [], chain
         elif i > 0:
-            return chain[:i+1], chain[i:]
+            return chain[:i + 1], chain[i:]
         order[head] = len(chain)
         chain.append(head)
         nexts = [i for i in neis[head] if i != last]
 
+
 def remove_cycle(neis, cycle, order):
-    for i in range(1,len(cycle)):
+    for i in range(1, len(cycle)):
         order[cycle[i]] = -1
     for i in range(len(cycle)):
-        j = i-1
+        j = i - 1
         if j < 0:
             j += len(cycle)
         a = cycle[i]
@@ -51,9 +53,10 @@ def tileByCycles(neis):
         yield cycle
         remove_cycle(neis, cycle, order)
 
+
 def tile(pairs, Nnode):
     neis = defaultdict(list)
-    for i,j in pairs:
+    for i, j in pairs:
         neis[i].append(j)
         neis[j].append(i)
     return [cycle for cycle in tileByCycles(neis)]
