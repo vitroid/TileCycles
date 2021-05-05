@@ -25,7 +25,7 @@ from genice2.plugin import Lattice, Format, Molecule
 lattice = Lattice("1c")
 formatter = Format("raw", stage=(1, 2,))
 water = Molecule("spce")
-raw = GenIce(lattice, rep=(20, 20, 20)).generate_ice(water, formatter)
+raw = GenIce(lattice, rep=(40, 40, 40)).generate_ice(water, formatter)
 
 pairs = []
 for i, j in raw["graph"].edges():
