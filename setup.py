@@ -12,20 +12,20 @@ import re
 # Copied from wheel package
 here = os.path.abspath(os.path.dirname(__file__))
 
-__version__ = "0.1.3"
+__version__ = "0.1.4.3"
 
 # bootstrap numpy
 dist.Distribution().fetch_build_eggs(['numpy'])
 
-setup(ext_modules=[Extension("tilecycles", ["c_tilecycles.cpp", "tilecycles.cpp"],
+setup(ext_modules=[Extension("tilecycles_c", ["c_tilecycles.cpp", "tilecycles_c.cpp"],
                              extra_compile_args=["-std=c++11", ],
                              include_dirs=get_numpy_include_dirs())],
-      headers=["tilecycles.hpp"],
+      headers=["tilecycles_c.hpp"],
       # include_dirs=get_numpy_include_dirs(),
       name='TileCycles',
       version=__version__,
       zip_safe=False,
-      py_modules=['tilecycles_py'],
+      py_modules=['tilecycles'],
       description='Bla bla.',
       #long_description=README + '\n\n' +  CHANGES,
       classifiers=[

@@ -5,11 +5,12 @@ build_ext:
 	python setup.py build_ext --inplace
 
 
-test-cpp: test-cpp.o tilecycles.o
+test-cpp: test-cpp.o tilecycles_c.o
 	clang++ $^ -o $@
-%.o: %.cpp tilecycles.hpp
+%.o: %.cpp tilecycles_c.hpp
 	clang++ -std=c++17 -c $< -g `python3-config --includes` -I`python -c "import numpy; print(numpy.get_include())"`
-
+benchmark:
+	python benchmark.py
 
 %: temp_% replacer.py $(wildcard *.py *.c)
 	pip install genice2_dev

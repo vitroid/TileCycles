@@ -2,8 +2,8 @@ import numpy as np
 #from f_tilecycles import find_cycle, remove_cycle
 import random
 
-import tilecycles_py as tc
-import tilecycles as ctc
+import tilecycles as tc
+import tilecycles_c as ctc
 
 import time
 
@@ -24,8 +24,7 @@ from genice2.plugin import Lattice, Format, Molecule
 
 lattice = Lattice("1c")
 formatter = Format("raw", stage=(1, 2,))
-water = Molecule("spce")
-raw = GenIce(lattice, rep=(40, 40, 40)).generate_ice(water, formatter)
+raw = GenIce(lattice, rep=(40, 40, 40)).generate_ice(formatter)
 
 pairs = []
 for i, j in raw["graph"].edges():

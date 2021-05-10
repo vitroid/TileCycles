@@ -6,7 +6,7 @@
 #include <numpy/arrayobject.h>
 //#include "C_arraytest.h"
 #include <math.h>
-#include "tilecycles.hpp"
+#include "tilecycles_c.hpp"
 
 static PyObject *tile(PyObject *self, PyObject* args);
 
@@ -25,7 +25,7 @@ static PyMethodDef module_methods[] = {
 
 static struct PyModuleDef moduledef = {
         PyModuleDef_HEAD_INIT,
-        "tilecycles",
+        "tilecycles_c",
         NULL,
         -1,
         module_methods,
@@ -37,7 +37,7 @@ static struct PyModuleDef moduledef = {
 
 
 //my initializer
-PyMODINIT_FUNC PyInit_tilecycles(void) {
+PyMODINIT_FUNC PyInit_tilecycles_c(void) {
   PyObject *m;
   import_array();
   m = PyModule_Create(&moduledef);

@@ -29,11 +29,8 @@ def remove_cycle(neis, cycle, order):
     for i in range(1, len(cycle)):
         order[cycle[i]] = -1
     for i in range(len(cycle)):
-        j = i - 1
-        if j < 0:
-            j += len(cycle)
         a = cycle[i]
-        b = cycle[j]
+        b = cycle[i - 1]
         neis[a].remove(b)
         neis[b].remove(a)
     for node in cycle:

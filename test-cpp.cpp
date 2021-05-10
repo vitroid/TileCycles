@@ -1,4 +1,4 @@
-#include "tilecycles.hpp"
+#include "tilecycles_c.hpp"
 #include <unistd.h>
 
 std::mt19937 gen(getpid());
