@@ -123,3 +123,27 @@ def depolarize(cycles, dipoles, dd, rpos, cell):
         return 1
     else:
         return 0
+
+
+# For odd-odd chains
+def remove_path(G, path):
+    for i in range(len(path)-1):
+        G.remove_edge(path[i], path[i+1])
+    for node in path:
+        if len(G[node]) == 0:
+            G.remove_node(node)
+
+
+def odd_chains(g):
+    # make a list of odd vertices
+    odds = set([node for node in g if len(g[node]) % 2 == 1])
+
+    # couple them.
+    while len(odds) > 0:
+        node = odds.pop()
+        for path in dp.shortest_paths(g, node, odds):
+            end = path[-1]
+            assert end in odds
+            odds.remove(end)
+            yield path
+            break        
