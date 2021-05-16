@@ -1,10 +1,9 @@
 #!/usr/bin/env python
 
 # from distutils.core import setup, Extension
+from setuptools import dist, setup, Extension, find_packages
 from numpy.distutils.misc_util import get_numpy_include_dirs
 import numpy
-from setuptools import dist
-from setuptools import setup, Extension
 import os
 import codecs
 import re
@@ -12,7 +11,7 @@ import re
 # Copied from wheel package
 here = os.path.abspath(os.path.dirname(__file__))
 
-__version__ = "0.1.4.3"
+__version__ = "0.1.5.1"
 
 # bootstrap numpy
 dist.Distribution().fetch_build_eggs(['numpy'])
@@ -34,12 +33,14 @@ setup(ext_modules=[Extension("tilecycles_c", ["c_tilecycles.cpp", "tilecycles_c.
     "Programming Language :: Python",
     "Programming Language :: Python :: 3.5",
 ],
+    packages=find_packages(),
+
     author='Masakazu Matsumoto',
     author_email='vitroid@gmail.com',
     url='https://github.com/vitroid/TileCycles/',
     keywords=['tile by cycles', ],
     license='MIT',
-    install_requires=['numpy', ],
+    install_requires=['numpy', 'networkx', 'cycless'],
     # entry_points = {
     #         'console_scripts': [
     #             'pairlist = pairlist:main'
