@@ -11,7 +11,7 @@ import re
 # Copied from wheel package
 here = os.path.abspath(os.path.dirname(__file__))
 
-__version__ = "0.1.5.1"
+__version__ = "0.1.5.2"
 
 # bootstrap numpy
 dist.Distribution().fetch_build_eggs(['numpy'])
