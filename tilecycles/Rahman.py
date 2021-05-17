@@ -6,10 +6,10 @@ def six(d, Nnode, MaxSize=1e99):
     find a cyclic path in the given digraph.
     d: digraph (networkx.DiGraph)
     """
-    head = random.randint(0, Nnode-1)
+    head = random.randint(0, Nnode - 1)
     path = [head]
     while True:
-        nexts = list(d.neighbors(head))
+        nexts = list(d.successors(head))
         next = random.choice(nexts)
         if next in path:
             i = path.index(next)
@@ -21,10 +21,9 @@ def six(d, Nnode, MaxSize=1e99):
         head = next
 
 
-
 def invertCycle(d, cycle, g_footprint):
     for i in range(len(cycle)):
-        a, b = cycle[i-1], cycle[i]
+        a, b = cycle[i - 1], cycle[i]
         d.remove_edge(a, b)
         d.add_edge(b, a)
         # footprint

@@ -38,9 +38,9 @@ def nearest_to_origin(vertices, coord, cell):
     coord: fractional coordinates of all vertices
     cell: cell shape
     """
-    v = coord[vertices] # fancy indexing
-    v -= np.floor(v+0.5)
-    d = np.sum(v*v, axis=1)
+    v = coord[vertices]  # fancy indexing
+    v -= np.floor(v + 0.5)
+    d = np.sum(v * v, axis=1)
     nearest = np.argmin(d)
     # print(nearest, d[nearest])
     return vertices[nearest]
@@ -56,7 +56,7 @@ def net_polarization(dipoles):
 def cycle_dipole(cycle, dipoles):
     net = 0
     for i in range(len(cycle)):
-        a, b = cycle[i-1], cycle[i]
+        a, b = cycle[i - 1], cycle[i]
         net += dipoles[a, b]
     return net
 
@@ -64,7 +64,7 @@ def cycle_dipole(cycle, dipoles):
 def invert(cycle, G, dipoles):
     # print(cycle)
     for i in range(len(cycle)):
-        a, b = cycle[i-1], cycle[i]
+        a, b = cycle[i - 1], cycle[i]
         dipoles[b, a] = -dipoles[a, b]
         del dipoles[a, b]
         G.remove_edge(a, b)
@@ -78,7 +78,7 @@ def force_depolarize(G, rpos, cell, dipoles):
     # all vertices.
     # It should be divided into subcells if the system is huge.
     vertices = [x for x in range(rpos.shape[0])]
-    for axis in (0,1,2):
+    for axis in (0, 1, 2):
         unitvec = np.zeros(3)
         unitvec[axis] += 1
         while abs(net[axis]) > 0.1:
@@ -88,7 +88,8 @@ def force_depolarize(G, rpos, cell, dipoles):
             center = random.sample(vertices, 1)[0]
 
             # find the apsis
-            apsis = nearest_to_origin(vertices, rpos - (rpos[center] + unitvec/2), cell)
+            apsis = nearest_to_origin(
+                vertices, rpos - (rpos[center] + unitvec / 2), cell)
             # for v in (center, apsis):
             #     print(v, rpos[v])
 
@@ -98,10 +99,10 @@ def force_depolarize(G, rpos, cell, dipoles):
                     cycle = c2a[:-1] + a2c[:-1]
                     dip = cycle_dipole(cycle, dipoles)
                     # print(dip)
-                    newnet = net - dip*2
+                    newnet = net - dip * 2
                     if net @ net > newnet @ newnet:
                         # accept and invert.
-#                         print(f"axis {axis} accepted {len(cycle)}")
+                        #                         print(f"axis {axis} accepted {len(cycle)}")
                         invert(cycle, G, dipoles)
                         net = newnet
                     break

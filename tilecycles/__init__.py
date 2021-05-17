@@ -29,7 +29,7 @@ def find_cycle(g, chain, order):
         # if the random walk crosses at an intermediate node of the chain,
         elif i > 0:
             # return a chain and a cycle
-            return chain[:i+1], chain[i:]
+            return chain[:i + 1], chain[i:]
         # otherwise, mark the new head position
         order[head] = len(chain)
         chain.append(head)
@@ -41,7 +41,7 @@ def remove_cycle(g, cycle, order):
         order[cycle[i]] = -1
     # remove edges of the cycle
     for i in range(len(cycle)):
-        a = cycle[i-1]
+        a = cycle[i - 1]
         b = cycle[i]
         g.remove_edge(a, b)
     # remove edgeless vertices in the graph
@@ -102,8 +102,8 @@ def depolarize(cycles, dipoles, dd, rpos, cell):
     net = dp.net_polarization(dipoles)
     count = 100
     while not np.allclose(net, 0):
-        r = random.randint(0, Ncycle-1)
-        newnet = net - 2*direction[r]*cycdip[r]
+        r = random.randint(0, Ncycle - 1)
+        newnet = net - 2 * direction[r] * cycdip[r]
         if net @ net > newnet @ newnet:
             direction[r] = -direction[r]
             net = newnet
@@ -127,8 +127,8 @@ def depolarize(cycles, dipoles, dd, rpos, cell):
 
 # For odd-odd chains
 def remove_path(G, path):
-    for i in range(len(path)-1):
-        G.remove_edge(path[i], path[i+1])
+    for i in range(len(path) - 1):
+        G.remove_edge(path[i], path[i + 1])
     for node in path:
         if len(G[node]) == 0:
             G.remove_node(node)
@@ -146,4 +146,4 @@ def odd_chains(g):
             assert end in odds
             odds.remove(end)
             yield path
-            break        
+            break
