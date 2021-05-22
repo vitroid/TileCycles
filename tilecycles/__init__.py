@@ -53,9 +53,9 @@ def remove_cycle(g, cycle, order):
 def tileByCycles(g, Nnode=-1):
     # random walk path
     chain = []
-    # markers that indicate the orders in the path
     if Nnode < 0:
         Nnode = g.number_of_nodes()
+    # markers that indicate the orders in the path
     order = -np.ones(Nnode, dtype=np.int)
     while g.number_of_nodes() > 0:
         # if the chain is empty

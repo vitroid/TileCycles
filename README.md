@@ -22,28 +22,12 @@ cycles = tc.tile(pairs, Nnode)
 * __Nnode__: Number of nodes in a graph.
 
 ### Output
+
 * __cycles__: A list of numpy arrays of arbitrary size. Each array contains the list of labels constituting a cycle.
 
-## ToDos
-
-* Depolarizer should be implemented.
-
 ## Benchmarks
-Run `TileCycles.ipynb` on Jupyter for finer benchmarkings.
 
-Ic, 30x30x30, tiling only, on Apple M1 using the `benchmark.py`.
-```shell
-% python benchmark.py
-0.09434318542480469 c++
-1.2123610973358154 python
-```
-
-Ic, 40x40x40, tiling only, on Apple M1 using the `benchmark.py`.
-```shell
-% python benchmark.py
-0.26435399055480957 c++
-3.587411880493164 python
-```
+Run `TileCycles.ipynb` on Jupyter or Google Colaboratory.
 
 ## Note
 
