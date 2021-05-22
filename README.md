@@ -27,7 +27,7 @@ cycles = tc.tile(pairs, Nnode)
 
 ## Benchmarks
 
-Run `TileCycles.ipynb` on Jupyter or Google Colaboratory.
+Run [`TileCycles.ipynb`](https://github.com/vitroid/TileCycles/blob/main/TileCycles.ipynb) on Jupyter or Google Colaboratory.
 
 ## Note
 
