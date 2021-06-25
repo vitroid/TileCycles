@@ -1,6 +1,6 @@
 # TileCycles
 
-Tile an even graph with cycles. It is the core part of GenIce2 to make a hydrogen-disordered ice structure.
+Tile an even graph with cycles. It is the core part of [GenIce2](https://github.com/vitroid/GenIce) to make a hydrogen-disordered ice structure.
 
 
 ## What is the tiling by cycles?
