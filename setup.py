@@ -2,8 +2,8 @@
 
 # from distutils.core import setup, Extension
 from setuptools import dist, setup, Extension, find_packages
-from numpy.distutils.misc_util import get_numpy_include_dirs
-import numpy
+# from numpy.distutils.misc_util import get_numpy_include_dirs
+# import numpy
 import os
 import codecs
 import re
@@ -11,15 +11,16 @@ import re
 # Copied from wheel package
 here = os.path.abspath(os.path.dirname(__file__))
 
-__version__ = "0.1.5.2"
+__version__ = "0.1.5.3"
 
 # bootstrap numpy
 dist.Distribution().fetch_build_eggs(['numpy'])
 
-setup(ext_modules=[Extension("tilecycles_c", ["c_tilecycles.cpp", "tilecycles_c.cpp"],
-                             extra_compile_args=["-std=c++11", ],
-                             include_dirs=get_numpy_include_dirs())],
-      headers=["tilecycles_c.hpp"],
+setup(
+# ext_modules=[Extension("tilecycles_c", ["c_tilecycles.cpp", "tilecycles_c.cpp"],
+#                              extra_compile_args=["-std=c++11", ],
+#                              include_dirs=get_numpy_include_dirs())],
+#       headers=["tilecycles_c.hpp"],
       # include_dirs=get_numpy_include_dirs(),
       name='TileCycles',
       version=__version__,
@@ -41,22 +42,4 @@ setup(ext_modules=[Extension("tilecycles_c", ["c_tilecycles.cpp", "tilecycles_c.
     keywords=['tile by cycles', ],
     license='MIT',
     install_requires=['numpy', 'networkx', 'cycless'],
-    # entry_points = {
-    #         'console_scripts': [
-    #             'pairlist = pairlist:main'
-    #         ]
-    #     }
 )
-
-
-# from setuptools import setup, Extension
-# from Cython.Build import cythonize
-# import numpy
-#
-# sourcefiles = ["tilecycles_cython.pyx"] #, 'mt19937-64.c']
-# extensions = [Extension("tilecycles_cython", sourcefiles)]
-#
-# setup(
-#     ext_modules=cythonize(extensions),
-#     include_dirs=[numpy.get_include()]
-# )
