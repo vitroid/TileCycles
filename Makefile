@@ -18,9 +18,10 @@ benchmark:
 
 
 test-deploy: build
+	-pip install twine
 	twine upload -r pypitest dist/*
 test-install:
-	pip install --index-url https://test.pypi.org/simple/ $(PKGNAME)
+	pip install --no-cache-dir --index-url https://test.pypi.org/simple/ $(PKGNAME)
 
 pep8:
 	autopep8 -r -a -a -i .
