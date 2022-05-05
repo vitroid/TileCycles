@@ -36,7 +36,7 @@ def find_cycle(g, chain, order):
 
 
 def remove_cycle(g, cycle, order):
-    # unmark vertices in the cycle (except for the first vertecx)
+    # unmark vertices in the cycle (except for the first vertex)
     for i in range(1, len(cycle)):
         order[cycle[i]] = -1
     # remove edges of the cycle
@@ -50,11 +50,10 @@ def remove_cycle(g, cycle, order):
             g.remove_node(a)
 
 
-def tileByCycles(g, Nnode=-1):
+def tileByCycles(g):
     # random walk path
     chain = []
-    if Nnode < 0:
-        Nnode = g.number_of_nodes()
+    Nnode = g.number_of_nodes()
     # markers that indicate the orders in the path
     order = -np.ones(Nnode, dtype=np.int)
     while g.number_of_nodes() > 0:
@@ -73,7 +72,59 @@ def tileByCycles(g, Nnode=-1):
         remove_cycle(g, cycle, order)
 
 
-def tile(pairs, Nnode=-1, seed=-1):
+def tileByCycles2(g):
+    """
+    Trial for more homogeneous sampling by node division.
+    According to the idea by Prof. Sakuma at Akita University.
+    However, it results in very huge cycles, that are not suitable for depolarization.
+    Also, it is a little bit slower than tileByCycles().
+    """
+    def labels(nodes):
+        newn = []
+        for node in nodes:
+            if node < 0:
+                newn.append(-1-node)
+            else:
+                newn.append(node)
+        return newn
+
+    # Double the nodes
+    # Give negative numbers for the duplicated nodes
+    Nnode = g.number_of_nodes()
+    for i in range(Nnode):
+        doppel = -i-1
+        assert not g.has_node(doppel)
+        g.add_node(doppel)
+        nei = [j for j in g.neighbors(i)]
+        assert len(nei) == 4, g[i]
+        for v in random.sample(nei, 2):
+            g.remove_edge(i, v)
+            g.add_edge(doppel, v)
+    while g.number_of_nodes() > 0:
+        cycle = []
+        head = list(g.nodes())[0]
+        nei = [j for j in g.neighbors(head)]
+        # print(nei)
+        cycle.append(head)
+        last = head
+        succ = random.choice(nei)
+        # print(succ)
+        while succ != head:
+            cycle.append(succ)
+            # print(cycle)
+            nei = [j for j in g.neighbors(succ)]
+            assert len(nei) == 2
+            s2 = nei[0]
+            if s2 == last:
+                s2 = nei[1]
+            last, succ = succ, s2
+        yield labels(cycle)
+        for v in cycle:
+            g.remove_node(v)
+    
+
+
+def tile(pairs):
     """
     Nnode and seed are dummpy parameters
     for the compatibility with c++ codes.
@@ -147,3 +198,6 @@ def odd_chains(g):
             odds.remove(end)
             yield path
             break
+
+
+
