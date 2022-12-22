@@ -1,6 +1,8 @@
 import random
-import numpy as np
+
 import networkx as nx
+import numpy as np
+
 import tilecycles.Dipole as dp
 
 
@@ -55,7 +57,7 @@ def tileByCycles(g):
     chain = []
     Nnode = g.number_of_nodes()
     # markers that indicate the orders in the path
-    order = -np.ones(Nnode, dtype=np.int)
+    order = -np.ones(Nnode, dtype=int)
     while g.number_of_nodes() > 0:
         # if the chain is empty
         if len(chain) == 0:
@@ -121,7 +123,7 @@ def tileByCycles2(g):
         yield labels(cycle)
         for v in cycle:
             g.remove_node(v)
-    
+
 
 
 def tile(pairs):
@@ -198,6 +200,3 @@ def odd_chains(g):
             odds.remove(end)
             yield path
             break
-
-
-
