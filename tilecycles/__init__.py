@@ -77,9 +77,7 @@ def tileByCycles(g):
 def tileByCycles2(g):
     """
     Trial for more homogeneous sampling by node division.
-    According to the idea by Prof. Sakuma at Akita University.
-    However, it results in very huge cycles, that are not suitable for depolarization.
-    Also, it is a little bit slower than tileByCycles().
+    According to the idea by Prof. Sakuma at Yamagata University.
     """
     def labels(nodes):
         newn = []
@@ -104,13 +102,14 @@ def tileByCycles2(g):
             g.add_edge(doppel, v)
     while g.number_of_nodes() > 0:
         cycle = []
+        # choose one node from the graph
         head = list(g.nodes())[0]
         nei = [j for j in g.neighbors(head)]
         # print(nei)
         cycle.append(head)
         last = head
+        # next node
         succ = random.choice(nei)
-        # print(succ)
         while succ != head:
             cycle.append(succ)
             # print(cycle)
@@ -126,7 +125,7 @@ def tileByCycles2(g):
 
 
 
-def tile(pairs):
+def tile(pairs, Nnode=None):
     """
     Nnode and seed are dummpy parameters
     for the compatibility with c++ codes.

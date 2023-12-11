@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "tilecycles"
+version = "0.2.3"
+description = ""
+authors = ["vitroid <vitroid@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = ">=3.9"
+numpy = "^1.9"
+networkx = "^2.0.dev20160901144005"
+
+[tool.poetry.group.dev.dependencies]
+GenIce2 = ">=2.1.7.1"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

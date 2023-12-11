@@ -17,27 +17,20 @@ benchmark:
 	python replacer.py < $< > $@
 
 
-test-deploy: build
-	-pip install twine
-	twine upload -r pypitest dist/*
+test-deploy:
+	poetry publish --build -r testpypi
 test-install:
-	pip install --no-cache-dir --index-url https://test.pypi.org/simple/ $(PKGNAME)
-
-pep8:
-	autopep8 -r -a -a -i .
-
-install:
-	python setup.py install
+	pip install --index-url https://test.pypi.org/simple/ $(PKGNAME)
 uninstall:
 	-pip uninstall -y $(PKGNAME)
-build: README.md
-	./setup.py sdist # bdist_wheel
-
-
-deploy: build
-	twine upload --repository pypi dist/*
+build: README.md $(wildcard cycles/*.py)
+	poetry build
+deploy:
+	poetry publish --build
 check:
-	./setup.py check
+	poetry check
+
+
 
 
 clean:
